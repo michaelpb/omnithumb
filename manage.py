@@ -3,18 +3,8 @@
 import os
 import click
 
-from sanic import Sanic
-
-app = Sanic(__name__)
-
-def register_service(service):
-    service.config = None
-    service.app = app
-    app.blueprint(service.blueprint, url_prefix='/%s' % service.NAME)
-
-def register_all():
-    from omnithumb.services import thumb
-    register_service(thumb.Service)
+import omnithumb
+from omnithumb import default_settings as settings
 
 @click.group()
 def cmds():
@@ -29,10 +19,11 @@ def cmds():
               help=u'Set application server debug!')
 def runserver(port, ip, debug):
     click.echo('Start server at: {}:{}'.format(ip, port))
+    omnithumb.runserver(settings, host=ip, port=port, debug=debug)
+
     register_all()
     # TODO: add reloading, add environ 
     app.run(host=ip, port=port, debug=debug)
-
 
 @cmds.command()
 def test():

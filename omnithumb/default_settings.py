@@ -1,0 +1,6 @@
+SERVICES = [
+    'omnithumb.services.thumb',
+]
+
+
+

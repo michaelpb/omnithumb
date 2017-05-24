@@ -14,6 +14,8 @@ class Service:
     blueprint = Blueprint(NAME)
     config = None
     app = None
+    log = None
+    enqueue = None
 
 #@blueprint.route('/<width:int>x<height:int>/<url_suffix:.+>')
 #async def thumb_route(request, width, height, url_suffix):
@@ -24,14 +26,18 @@ PIXEL_B = b64decode(PIXEL_B64)
 async def stream_pixel(response):
     response.write(PIXEL_B)
 
-async def generate_thumb(size, orig_resource, thumb_resource):
-    print('generating thumb', size)
-    with orig_resource.open('rb') as orig:
-        im = Image.open(orig)
+def generate_thumb(size, orig_resource, thumb_resource):
+    Service.log.debug('generating thumb ' + repr(size))
+    with orig_resource.open_cache() as orig:
+        try:
+            im = Image.open(orig)
+        except Exception as e:
+            Service.log.warning('Error opening: ' + repr(e))
+            return
         im.thumbnail(size)
-        with thumb_resource.open('wb') as target:
-            print('saved to ', thumb_resource.cache_path)
-            im.save(target, 'JPEG')
+    with thumb_resource.open_cache('wb') as target:
+        Service.log.debug('Saved to ' + thumb_resource.cache_path)
+        im.save(target, 'JPEG')
 
 @Service.blueprint.get('/')
 async def thumb_route(request):
@@ -45,17 +51,19 @@ async def thumb_route(request):
 
     # Send back cache if it exists
     if thumb_resource.cache_exists():
-        return await response.file(thumb_resource.cache_path)
+        return await response.file(thumb_resource.cache_path, headers={
+                'Content-Type': 'image/jpeg',
+            })
 
-    # Check if original resource exists
+    # Check if original resource exists, enqueue download if not
     orig_resource = utils.Resource(config, url_string)
     if not orig_resource.cache_exists():
-        print('queue up downloading original')
-        Service.app.loop.create_task(orig_resource.download())
+        Service.log.debug('queue up downloading original')
+        Service.enqueue(orig_resource.download)
+
     # Generate original resource
-    print('queue up generating thumb')
-    task = generate_thumb((width, height), orig_resource, thumb_resource)
-    Service.app.loop.create_task(task)
+    Service.log.debug('queue up generating thumb')
+    Service.enqueue(generate_thumb, (width, height), orig_resource, thumb_resource)
 
     # Respond with placeholder
     return response.stream(stream_pixel, content_type='image/png')

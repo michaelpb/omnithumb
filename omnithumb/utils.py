@@ -68,16 +68,13 @@ class Resource:
     def cache_exists(self):
         return os.path.exists(self.cache_path)
 
-    def request_get(self):
-        return requests.get(self.url_string, stream=True)
-
-    def open_cache(self, mode='wb'):
+    def open_cache(self, mode='rb'):
         dirname = os.path.dirname(self.cache_path)
         os.makedirs(dirname, exist_ok=True)
-        return open(self.cache_path, mode)
+        return open(self.cache_path, mode=mode)
 
-    async def download(self):
-        req = self.request_get()
-        with self.open_cache() as f:
+    def download(self):
+        req = requests.get(self.url_string, stream=True)
+        with self.open_cache('wb') as f:
             shutil.copyfileobj(req.raw, f)
 
