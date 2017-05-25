@@ -63,6 +63,6 @@ class ConverterGraph:
         for step in path:
             right = step
             converter = self.converters.get((left, right))
-            results.append((converter, TypeString(left), TypeString(right))
+            results.append((converter, TypeString(left), TypeString(right)))
         return results
 

@@ -95,6 +95,5 @@ class TestExecConverter(ConverterTestBase):
 
 
 class TestBasicConverterGraph(ConverterTestBase):
-    def test_properties(self):
-        self.converter_graph = converter.ConverterGraph(self.config)
+    pass # TODO
 
