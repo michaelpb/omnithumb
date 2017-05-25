@@ -1,4 +1,4 @@
-# High level concepts
+# OmniThumb high level structure
 
 Could do test first development for all of this.
 
@@ -18,21 +18,22 @@ Could do test first development for all of this.
     - Guess TypeString from a given input file
     - Output mimetype if it can be easily determined, otherwise extension
 
-- [ ] Create ForeignResource class
+- [X] Create ForeignResource class
     - A ForeignResource is a URL, and can be converted to a Resource by
       guessing a TypeString from it
 
-- [ ] Update Resource class
-    - A Resource is a URL and a TypeString
-    - Resources have a property `cache_path`, which is where to cache this file
+- [X] Create TypedResource class
+    - A TypedResource is a URL and a TypeString
+    - TypedResources have a property `cache_path`, which is where to cache this
+      file
 
-- [ ] Build Converter base class
+- [X] Build Converter base class
     - Converters have a list of input type strings formats (excluding
       argument list)
     - Converters have a list of output type string format
     - Converters can have a constant estimated conversion time, with 1 being
       fast and large numbers being slow (defaults to 1)
-    - Converters have a `run(resource : Resource, to_type : TypeString)` method
+    - Converters have a `convert(in : TypedResource, out : TypedResource)` method
       which will attempt to convert the given resource into the given output
       TypeString. The `to_type` in this case can include arguments.
 
@@ -60,10 +61,8 @@ Could do test first development for all of this.
       placeholder file for that TypeString
 
 
+# Misc other programs
 
-
-
-
-
-
+- Possibly create a JSC3D node module port / fork that uses `node-canvas`, and
+  expose a CLI that can render (via software) STL models and such
 

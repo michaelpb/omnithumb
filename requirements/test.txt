@@ -3,3 +3,4 @@
 coverage==4.4
 flake8==3.3.0 # pyup: != 2.6.0
 pytest-sugar==0.8.0
+requests-mock==1.3.0

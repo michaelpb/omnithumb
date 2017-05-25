@@ -146,6 +146,7 @@ class DirectedGraph:
         self._memoized_paths[memoized_key] = result
         return result
 
+
 class Type:
     def __init__(self, mimetype):
         self.mimetype = mimetype
