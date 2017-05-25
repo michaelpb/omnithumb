@@ -1,0 +1,69 @@
+# High level concepts
+
+Could do test first development for all of this.
+
+- [X] Build the "TypeString" system, as follows:
+    - TypeString is a superset of mimetype
+    - TypeStrings are encoded as follows:
+
+        type string   = format | format ":" argument list;
+        format        = mimetype | extension | qualifier;
+        mimetype      = [a-z]+"/"[a-z]+;
+        extension     = [A-Z]+;                           // e.g. STL, PNG, JPEG
+        qualifier     = [a-z]+;                           // e.g. thumb
+        argument list = value | value "," argument list;
+        value         = [a-z]+ | [0-9]+;
+
+- [X] Build TypeString tools
+    - Guess TypeString from a given input file
+    - Output mimetype if it can be easily determined, otherwise extension
+
+- [ ] Create ForeignResource class
+    - A ForeignResource is a URL, and can be converted to a Resource by
+      guessing a TypeString from it
+
+- [ ] Update Resource class
+    - A Resource is a URL and a TypeString
+    - Resources have a property `cache_path`, which is where to cache this file
+
+- [ ] Build Converter base class
+    - Converters have a list of input type strings formats (excluding
+      argument list)
+    - Converters have a list of output type string format
+    - Converters can have a constant estimated conversion time, with 1 being
+      fast and large numbers being slow (defaults to 1)
+    - Converters have a `run(resource : Resource, to_type : TypeString)` method
+      which will attempt to convert the given resource into the given output
+      TypeString. The `to_type` in this case can include arguments.
+
+- [ ] Build ConverterGraph class
+    - ConverterGraph takes in a list of converters and builds a graph from it
+    - ConverterGraph has a method `find_conversion_path(from : TypeString, to :
+      TypeString)` outputs an array in the following format, OR raises a
+      `ConverterGraph.NoPathFound` exception:
+
+        [
+            (Converter, TypeString, TypeString),
+            (Converter, TypeString, TypeString),
+            ...
+        ]
+
+- [ ] Build PlaceHolderResponse class
+    - PlaceHolderResponse has a list of type string formats that it can
+      generate place-holder reponses of
+    - e.g. There should be one for all image types that is just a single pixel
+      PNG
+
+- [ ] Build out the media service
+    - The media service route has a TypeString in the URL
+    - The media service route responds with the converted file, OR a
+      placeholder file for that TypeString
+
+
+
+
+
+
+
+
+

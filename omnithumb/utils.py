@@ -1,10 +1,12 @@
 import hashlib
 import os
-import requests
 import shutil
 import asyncio
+import heapq
 from itertools import zip_longest
 from urllib.parse import urlparse
+
+import requests
 
 def group_by(iterable, n, fill=None):
     args = [iter(iterable)] * n
@@ -69,12 +71,91 @@ class Resource:
         return os.path.exists(self.cache_path)
 
     def open_cache(self, mode='rb'):
-        dirname = os.path.dirname(self.cache_path)
-        os.makedirs(dirname, exist_ok=True)
+        if mode == 'wb':
+            dirname = os.path.dirname(self.cache_path)
+            os.makedirs(dirname, exist_ok=True)
         return open(self.cache_path, mode=mode)
 
     def download(self):
         req = requests.get(self.url_string, stream=True)
         with self.open_cache('wb') as f:
             shutil.copyfileobj(req.raw, f)
+
+    def get_cache_mimetype(self):
+        # LOGIC: for 'orig' type files, once
+        with self.open_cache() as f:
+            mimetype = magic.from_buffer(f.read(128), mime=True)
+        return mimetype
+
+    def get_known_ext(self):
+        # LOGIC: for 'orig' type files, first try mimetype, then ext
+        if self.prefix == 'orig':
+            # Validate mimetype against extension
+            mimetype = self.get_cache_mimetype()
+            if not mimetype:
+                # Could not get mimetype from data, just use extension
+                return os.path.splitext(self.basename)[1]
+
+            # Can determine mimetype from data, go with that
+            return mimetypes.guess_ext(mimetype)
+
+            # TODO
+            # More possibly uselsees logic here:
+            guessed_mimetype, encoding = mimetypes.guess_type(self.basename)
+            if not guessed_mimetype or guessed_mimetype != mimetype:
+                # Should log warning, and used current mimetype
+                return mimetypes.guess_ext(mimetype)
+            return os.path.splitext(self.basename)[1]
+
+        return os.path.splitext(self.basename)[1]
+
+class DirectedGraph:
+    '''
+    Simple weighted directed graph implementation with a memoized shortest path built in.
+    '''
+    def __init__(self):
+        self.edges = {}
+        self._memoized_paths = {}
+
+    def add_edge(self, a, b, cost=1):
+        self.edges.setdefault(a, {})
+        self.edges[a][b] = cost
+
+    def find_path(self, start, end):
+        memoized_key = (start, end)
+        if memoized_key in self._memoized_paths:
+            return self._memoized_paths[memoized_key]
+
+        # From Chris Laffa's implementation of Dijkstra's algorithm with heapq:
+        # http://code.activestate.com/recipes/119466-dijkstras-algorithm-for-shortest-paths/
+        queue = [(0, start, [])]
+        seen = set()
+        graph = self.edges
+        result = None
+        while True:
+            (cost, vertex, path) = heapq.heappop(queue)
+            if vertex not in seen:
+                path = path + [vertex]
+                seen.add(vertex)
+                if vertex == end:
+                    result = (cost, path)
+                    break
+                for (next, c) in graph[vertex].items():
+                    heapq.heappush(queue, (cost + c, next, path))
+
+        self._memoized_paths[memoized_key] = result
+        return result
+
+class Type:
+    def __init__(self, mimetype):
+        self.mimetype = mimetype
+
+    def check_url(self, resource):
+        url = resource.url_string
+        request = urllib.request.Request(url)
+        response = urlopen(request)
+        mimetype = magic.from_buffer(response.read(128), mime=True)
+        return self.mimetype == mimetype
+
+
 

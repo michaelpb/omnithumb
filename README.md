@@ -32,6 +32,12 @@ environments, however it is very close.
 5. Start the server:
     * `python manage.py runserver`
 
+To test it, try visiting:
+* http://localhost:8080/thumb/?width=100&height=100&url=unsplash.it/1010/1010
+
+The first time you visit it it will just be a single placeholder pixel.
+Subsequent times it should be 100x100 thumbnail
+
 ## With Docker
 
 1. TODO: Add in docker compose files for getting this bad boy up and

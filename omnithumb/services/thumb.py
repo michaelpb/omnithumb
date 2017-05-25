@@ -54,6 +54,8 @@ async def thumb_route(request):
         return await response.file(thumb_resource.cache_path, headers={
                 'Content-Type': 'image/jpeg',
             })
+    #Service.enqueue_resource(thumb_resource)
+    #return response.stream(stream_pixel, content_type='image/png')
 
     # Check if original resource exists, enqueue download if not
     orig_resource = utils.Resource(config, url_string)
