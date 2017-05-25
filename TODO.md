@@ -33,9 +33,9 @@ Could do test first development for all of this.
     - Converters have a list of output type string format
     - Converters can have a constant estimated conversion time, with 1 being
       fast and large numbers being slow (defaults to 1)
-    - Converters have a `convert(in : TypedResource, out : TypedResource)` method
-      which will attempt to convert the given resource into the given output
-      TypeString. The `to_type` in this case can include arguments.
+    - Converters have a `convert(in : TypedResource, out : TypedResource)`
+      method which will attempt to convert the given resource into the given
+      output TypeString. The `to_type` in this case can include arguments.
 
 - [ ] Build ConverterGraph class
     - ConverterGraph takes in a list of converters and builds a graph from it
