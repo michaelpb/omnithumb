@@ -3,6 +3,7 @@ import asyncio
 import subprocess
 
 from .utils import DirectedGraph
+from .typestring import TypeString
 
 class Converter:
     cost = 1
@@ -48,16 +49,20 @@ class HardLinkConverter(Converter):
 
 class ConverterGraph:
     def __init__(self, converter_list):
-        self.dgraph = DirectedGraph
-        self.converters = []
-        for converter in self.converter_list:
+        self.dgraph = DirectedGraph()
+        self.converters = {}
+        for converter in converter_list:
             for in_ in converter.inputs:
                 for out in converter.outputs:
                     self.dgraph.add_edge(in_, out)
                     self.converters[(in_, out)] = converter
 
     def find_path(self, in_, out):
-        total_cost, path = self.dgraph.find_path(str(in_), str(out))
+        # TODO strip args
+        in_f = in_.ts_format
+        out_f = out.ts_format
+        total_cost, path = self.dgraph.find_path(in_f, out_f)
+        print('this is path', path)
         left = str(in_)
         results = []
         for step in path:

@@ -17,11 +17,6 @@ JPG_TEST_BYTES = bytes([0xff, 0xd8, 0xff, 0xe0])
 # TODO: Fix these tests to be less integrate-y, mock out subprocess
 # calls
 
-class MockConfig:
-    PATH_GROUPING = 'MD5'
-    PATH_PREFIX = ''
-    ALLOWED_LOCATIONS = '*'
-
 class HardLinkConverter(converter.HardLinkConverter):
     inputs = ['JPEG']
     outputs = ['JPG']
@@ -45,6 +40,42 @@ class ExecConverterWithArgs(ExecConverter):
     ]
 
 
+# Set up system of dummy converters
+class ConvertMovieToImage(converter.HardLinkConverter):
+    inputs = ['MOV', 'AVI', 'MP4']
+    outputs = ['JPG']
+
+
+class ConvertImageToThumb(converter.HardLinkConverter):
+    inputs = ['JPG', 'PNG', 'GIF']
+    outputs = ['thumb.png']
+
+
+class Convert3DGraphicsToMovie(converter.HardLinkConverter):
+    inputs = ['STL', 'OBJ', 'MESH']
+    outputs = ['AVI']
+
+
+class Convert3DGraphicsToImage(converter.HardLinkConverter):
+    inputs = ['STL', 'OBJ', 'MESH']
+    outputs = ['PNG']
+
+
+class CleanUpAudio(converter.HardLinkConverter):
+    inputs = ['MP3', 'WAV', 'OGG']
+    outputs = ['cleaned.ogg']
+
+
+class MockConfig:
+    PATH_GROUPING = 'MD5'
+    PATH_PREFIX = ''
+    ALLOWED_LOCATIONS = '*'
+    CONVERTERS = [
+        ConvertMovieToImage,
+        ConvertImageToThumb,
+        Convert3DGraphicsToMovie,
+        CleanUpAudio,
+    ]
 
 class ConverterTestBase:
     def setup_method(self, method):
@@ -95,5 +126,28 @@ class TestExecConverter(ConverterTestBase):
 
 
 class TestBasicConverterGraph(ConverterTestBase):
-    pass # TODO
+    @classmethod
+    def setup_class(cls):
+        cls.cgraph = converter.ConverterGraph(MockConfig.CONVERTERS)
+
+    def _path(self, in_str, out_str):
+        return self.cgraph.find_path(TypeString(in_str), TypeString(out_str))
+
+    def test_find_path(self):
+        # Test typical case
+        results = self._path('AVI', 'thumb.png:200x200')
+        assert len(results) == 2 # should be 2 steps
+        assert all(len(step) == 3 for step in results) # each step should be 3
+        assert results[0][0] is ConvertMovieToImage
+        assert results[1][0] is ConvertImageToThumb
+
+    def test_finds_shortest_path(self):
+        # Ensure not taking long route
+        results = self._path('STL', 'thumb.png:100x100')
+        assert len(results) == 2 # should be 2 steps
+        assert all(len(step) == 3 for step in results) # each step should be 3
+        assert results[0][0] is Convert3DGraphicsToImage
+        assert results[1][0] is ConvertImageToThumb
+
+
 

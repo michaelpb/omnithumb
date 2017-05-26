@@ -1,3 +1,5 @@
+import heapq
+
 class DirectedGraph:
     '''
     Simple weighted directed graph implementation with a memoized shortest path built in.
