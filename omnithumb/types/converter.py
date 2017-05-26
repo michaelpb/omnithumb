@@ -3,7 +3,7 @@ import asyncio
 import subprocess
 
 from omnithumb.utils.graph import DirectedGraph
-from .utils import pair_looper
+from omnithumb.utils.iter import pair_looper
 from .typestring import TypeString
 
 class Converter:

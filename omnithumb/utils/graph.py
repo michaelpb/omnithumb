@@ -1,8 +1,5 @@
-import collections
 import math
 import functools
-
-from .func import memoize
 
 class DirectedGraph:
     class NoPath(ValueError): pass
@@ -56,8 +53,8 @@ class DirectedGraph:
                 end = path[-1]
                 if start == end:
                     continue # Skip over self paths
-                existing_distance, _ = shortest_paths.get((start, end), (math.inf, None))
-                if weight < existing_distance:
+                shortest, _ = shortest_paths.get((start, end), (math.inf, None))
+                if weight < shortest:
                     shortest_paths[(start, end)] = (weight, path)
         return shortest_paths
 

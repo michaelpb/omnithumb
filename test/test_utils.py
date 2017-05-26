@@ -3,14 +3,14 @@ Tests for `utils` module.
 """
 import pytest
 
-from omnithumb.types import utils
+from omnithumb.utils import graph
 
 class TestDirectedGraph:
     #  ,-> F ,-> E
     # A -> B  -> C
     #        '-> D
     def _simple_tree(self):
-        self.dg = utils.DirectedGraph()
+        self.dg = graph.DirectedGraph()
         self.dg.add_edge('A', 'B', 1)
         self.dg.add_edge('A', 'F', 1)
         self.dg.add_edge('B', 'E', 1)
@@ -21,7 +21,7 @@ class TestDirectedGraph:
     # '    v         v
     # A -> B -> G -> C
     def _multi_pathed_graph(self):
-        self.dg = utils.DirectedGraph()
+        self.dg = graph.DirectedGraph()
         self.dg.add_edge('A', 'B', 1)
         self.dg.add_edge('B', 'G', 1)
         self.dg.add_edge('G', 'C', 1)
@@ -33,7 +33,7 @@ class TestDirectedGraph:
     # '    v         v
     # A -> B -> G -> C
     def _multi_pathed_graph_weighted(self):
-        self.dg = utils.DirectedGraph()
+        self.dg = graph.DirectedGraph()
         self.dg.add_edge('A', 'B', 1)
         self.dg.add_edge('B', 'G', 1)
         self.dg.add_edge('G', 'C', 1)
@@ -52,7 +52,7 @@ class TestDirectedGraph:
 
 
     def _realistic_edges(self):
-        self.dg = utils.DirectedGraph()
+        self.dg = graph.DirectedGraph()
         self.dg.add_edge('MOV', 'JPG')
         self.dg.add_edge('AVI', 'JPG')
         self.dg.add_edge('MP4', 'JPG')
@@ -84,7 +84,7 @@ class TestDirectedGraph:
 
     def test_raises_on_invalid_path(self):
         self._simple_tree()
-        with pytest.raises(utils.DirectedGraph.NoPath):
+        with pytest.raises(graph.DirectedGraph.NoPath):
             path = self.dg.shortest_path('B', 'A')
 
     def test_shortest_route(self):
@@ -125,6 +125,6 @@ class TestDirectedGraph:
         assert path == ('MESH', 'AVI', 'JPG')
         path = self.dg.shortest_path('MP3', 'cleaned.ogg')
         assert path == ('MP3', 'cleaned.ogg')
-        with pytest.raises(utils.DirectedGraph.NoPath):
+        with pytest.raises(graph.DirectedGraph.NoPath):
             self.dg.shortest_path('MP3', 'thumb.png')
 
