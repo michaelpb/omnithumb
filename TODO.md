@@ -37,7 +37,7 @@ Could do test first development for all of this.
       method which will attempt to convert the given resource into the given
       output TypeString. The `to_type` in this case can include arguments.
 
-- [ ] Build ConverterGraph class
+- [X] Build ConverterGraph class
     - ConverterGraph takes in a list of converters and builds a graph from it
     - ConverterGraph has a method `find_conversion_path(from : TypeString, to :
       TypeString)` outputs an array in the following format, OR raises a

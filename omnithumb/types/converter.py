@@ -2,7 +2,8 @@ import os
 import asyncio
 import subprocess
 
-from .utils import DirectedGraph, pair_looper
+from omnithumb.utils.graph import DirectedGraph
+from .utils import pair_looper
 from .typestring import TypeString
 
 class Converter:
@@ -36,7 +37,6 @@ class ExecConverter(Converter):
 
     def convert_sync(self, in_resource, out_resource):
         cmd = self.get_command(in_resource, out_resource)
-        print(cmd)
         return subprocess.run(cmd)
 
     convert = convert_sync
@@ -58,7 +58,6 @@ class ConverterGraph:
                     self.converters[(in_, out)] = converter
 
     def find_path(self, in_, out):
-        # TODO strip args
         in_f = in_.ts_format
         out_f = out.ts_format
         path = self.dgraph.shortest_path(in_f, out_f)
