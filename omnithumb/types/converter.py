@@ -61,7 +61,7 @@ class ConverterGraph:
         # TODO strip args
         in_f = in_.ts_format
         out_f = out.ts_format
-        total_cost, path = self.dgraph.find_path(in_f, out_f)
+        path = self.dgraph.shortest_path(in_f, out_f)
         results = []
         # Loop through each edge traversal, adding converters and type
         # string pairs as we go along

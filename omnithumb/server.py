@@ -2,7 +2,7 @@ from sanic import Sanic
 import logging
 import importlib
 
-from . import utils
+from . import old_utils
 
 logging_format = "[%(asctime)s] %(process)d-%(levelname)s "
 logging_format += "%(module)s::%(funcName)s():l%(lineno)d: "
@@ -15,7 +15,7 @@ logging.basicConfig(
 
 app = None
 
-type_graph = utils.DirectedGraph()
+type_graph = old_utils.DirectedGraph()
 type_graph.add_edge('image', 'thumb.500x500')
 
 def register_service(settings, service):

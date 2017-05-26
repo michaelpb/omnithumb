@@ -21,23 +21,18 @@ class TestDirectedGraph:
 
     def test_simple_routes(self):
         self._simple_tree()
-        cost, path = self.dg.find_path('A', 'B')
-        assert cost == 1
+        path = self.dg.shortest_path('A', 'B')
         assert path == ['A', 'B']
-        cost, path = self.dg.find_path('A', 'C')
-        assert cost == 2
+        path = self.dg.shortest_path('A', 'C')
         assert path == ['A', 'B', 'C']
-        cost, path = self.dg.find_path('A', 'E')
-        assert cost == 2
+        path = self.dg.shortest_path('A', 'E')
         assert path == ['A', 'B', 'E']
-        cost, path = self.dg.find_path('A', 'D')
-        assert cost == 2
+        path = self.dg.shortest_path('A', 'D')
         assert path == ['A', 'B', 'D']
-        cost, path = self.dg.find_path('B', 'C')
-        assert cost == 1
+        path = self.dg.shortest_path('B', 'C')
         assert path == ['B', 'C']
 
     def test_raises_on_invalid_path(self):
         with pytest.raises(utils.DirectedGraph.NoPath):
-            cost, path = self.dg.find_path('B', 'A')
+            cost, path = self.dg.shortest_path('B', 'A')
 

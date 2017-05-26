@@ -1,4 +1,4 @@
-from omnithumb.utils import Type
+from omnithumb.old_utils import Type
 #from omnithumb.thumb import ThumbType
 
 SERVICES = [

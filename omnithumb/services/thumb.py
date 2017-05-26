@@ -7,7 +7,7 @@ from sanic import Blueprint
 from sanic import response
 from sanic import Sanic
 
-from .. import utils
+from .. import old_utils
 
 class Service:
     NAME = 'thumb'
@@ -47,7 +47,7 @@ async def thumb_route(request):
     url_suffix = request.args['url'][0]
     url_string = 'http://' + url_suffix
     prefix = 'thumb-%ix%i' % (width, height)
-    thumb_resource = utils.Resource(config, url_string, prefix)
+    thumb_resource = old_utils.Resource(config, url_string, prefix)
 
     # Send back cache if it exists
     if thumb_resource.cache_exists():
@@ -58,7 +58,7 @@ async def thumb_route(request):
     #return response.stream(stream_pixel, content_type='image/png')
 
     # Check if original resource exists, enqueue download if not
-    orig_resource = utils.Resource(config, url_string)
+    orig_resource = old_utils.Resource(config, url_string)
     if not orig_resource.cache_exists():
         Service.log.debug('queue up downloading original')
         Service.enqueue(orig_resource.download)
