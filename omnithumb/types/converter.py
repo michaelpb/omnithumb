@@ -2,7 +2,7 @@ import os
 import asyncio
 import subprocess
 
-from .utils import DirectedGraph
+from .utils import DirectedGraph, pair_looper
 from .typestring import TypeString
 
 class Converter:
@@ -54,7 +54,7 @@ class ConverterGraph:
         for converter in converter_list:
             for in_ in converter.inputs:
                 for out in converter.outputs:
-                    self.dgraph.add_edge(in_, out)
+                    self.dgraph.add_edge(in_, out, converter.cost)
                     self.converters[(in_, out)] = converter
 
     def find_path(self, in_, out):
@@ -62,12 +62,13 @@ class ConverterGraph:
         in_f = in_.ts_format
         out_f = out.ts_format
         total_cost, path = self.dgraph.find_path(in_f, out_f)
-        print('this is path', path)
-        left = str(in_)
         results = []
-        for step in path:
-            right = step
+        # Loop through each edge traversal, adding converters and type
+        # string pairs as we go along
+        for left, right in pair_looper(path):
             converter = self.converters.get((left, right))
-            results.append((converter, TypeString(left), TypeString(right)))
+            ts_left = TypeString(left)
+            ts_right = out if out.ts_format == right else TypeString(right)
+            results.append((converter, ts_left, ts_right))
         return results
 

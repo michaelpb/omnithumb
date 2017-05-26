@@ -67,5 +67,5 @@ openlab/media/
 
 staticfiles/
 
-.cache/
+.cache/*
 
