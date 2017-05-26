@@ -1,4 +1,0 @@
-{
-  "test/test_converter.py::TestBasicConverterGraph::()::test_finds_shortest_path": true,
-  "test/test_utils.py::TestDirectedGraph::()::test_simple_routes": true
-}

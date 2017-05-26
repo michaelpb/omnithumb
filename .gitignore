@@ -16,9 +16,6 @@
 # proportion of contributors will probably not be using SublimeText
 # *.sublime-project
 
-# sftp configuration file
-sftp-config.json
-
 # Basics
 *.py[cod]
 __pycache__
@@ -32,7 +29,6 @@ npm-debug.log*
 # Unit test / coverage reports
 .coverage
 .tox
-nosetests.xml
 htmlcov
 
 # Translations
@@ -63,9 +59,7 @@ default.sqlite3.db
 # User-uploaded media
 openlab/media/
 
-
-
 staticfiles/
 
 .cache/*
-
+.cache/
