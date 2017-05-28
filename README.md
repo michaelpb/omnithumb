@@ -14,8 +14,8 @@ a wide variety of file types.
 ## Without Docker
 
 It's much simpler to run a dev environment without Docker, just using
-`virtualenv` as the backend. This will not precisely resemble production
-environments, however it is very close.
+`virtualenv`, and using asyncio's task queueing. This might not precisely
+resemble production environments, however it is very close.
 
 1. Install Python 3, including `pip` and `venv`:
     * On Debian-based distros:

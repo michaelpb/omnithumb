@@ -145,7 +145,7 @@ class TestBasicConverterGraph(ConverterTestBase):
     def test_finds_shortest_path(self):
         # Ensure not taking long route
         results = self._path('STL', 'thumb.png:100x100')
-        #assert len(results) == 2 # should be 2 steps
-        #assert all(len(step) == 3 for step in results) # each step should be 3
-        #assert results[0][0] is Convert3DGraphicsToImage
-        #assert results[1][0] is ConvertImageToThumb
+        assert len(results) == 2 # should be 2 steps
+        assert all(len(step) == 3 for step in results) # each step should be 3
+        assert results[0][0] is Convert3DGraphicsToImage
+        assert results[1][0] is ConvertImageToThumb

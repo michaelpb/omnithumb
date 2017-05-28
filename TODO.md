@@ -12,7 +12,7 @@ Could do test first development for all of this.
         extension     = [A-Z]+;                           // e.g. STL, PNG, JPEG
         qualifier     = [a-z]+;                           // e.g. thumb
         argument list = value | value "," argument list;
-        value         = [a-z]+ | [0-9]+;
+        value         = [a-z0-9]+;
 
 - [X] Build TypeString tools
     - Guess TypeString from a given input file
@@ -49,7 +49,7 @@ Could do test first development for all of this.
             ...
         ]
 
-- [ ] Build PlaceHolderResponse class
+- [X] Build PlaceHolderResponse class
     - PlaceHolderResponse has a list of type string formats that it can
       generate place-holder reponses of
     - e.g. There should be one for all image types that is just a single pixel
@@ -59,6 +59,14 @@ Could do test first development for all of this.
     - The media service route has a TypeString in the URL
     - The media service route responds with the converted file, OR a
       placeholder file for that TypeString
+
+# QoL improvements
+
+- [ ] TypeStringMatcher
+    - Can match based on mimetype categories, or custom properties
+    - Usable on Placeholders
+    - Not usable on Converters, presently, since it would impair creation of
+      ConverterGraph
 
 
 # Misc other programs
