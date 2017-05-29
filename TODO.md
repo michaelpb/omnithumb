@@ -56,16 +56,18 @@ Could do test first development for all of this.
       PNG
 
 # Build out contrib
-- [ ] Build out the thumb converter
+- [X] Build out the thumb converter
 
-- [ ] Build out the media service
+- [X] Build out the media service
     - The media service route has a TypeString in the URL
     - The media service route responds with the converted file, OR a
       placeholder file for that TypeString
 
-- [ ] Build out a default settings so it can be run for the original demo
+- [X] Build out a default settings so it can be run for the original demo
 
-- [ ] Clean up old thumb demo
+- [ ] Polish up and add tests for above
+
+- [ ] Delete old thumb demo code
 
 # QoL improvements
 
@@ -80,7 +82,107 @@ Could do test first development for all of this.
 
 - [ ] Built-in regexp for TypeString
 
-# Misc other programs
+# CLI and packaging
+- [ ] Decide on name: e.g. `OmniConverter`, or `omnic` for short. Move to
+  /omnic/ repo then
+
+- [ ] Fix setup.py packaging, set up pypi
+    - [ ] Add to setup.py only the minimum needed packages
+    - [ ] Document which packages needed for which contrib stuff
+
+- [ ] Document The Three Uses:
+    - Ready-to-go server - Provide docker container to spin up behind nginx,
+      using env variables to configure, only providing a settings.py file if
+      necessary
+    - CLI and library" - Include in other projects (e.g. Django,
+      Celery) as a useful conversion utility
+    - Web media conversion framework - In the manner of Django, Flask, etc have
+      a cookiecutter example of setting up an new project, and hooking in your
+      own Services and Converters
+
+- [ ] Expose `omnic` command as follows:
+    - `omnic runserver` -- runs a server
+    - `omnic convert file.pdf PNG` -- converts from PDF to PNG
+    - `omnic convert file.pdf PNG --out=doc.png` -- same as above, but named
+    - `omnic render osm-geo:79,32,12 thumb.png` -- renders given thing to PNG
+    - `omnic --settings=settings.py <CMD>` -- uses given settings py file
+    - `omnic --set-port=8080 <CMD>` -- change individual settings
+    - `omnic scaffold new-project` -- scaffolding
+    - `omnic scaffold new-service` -- ditto
+
+- [ ] Redis-only commands:
+    - `omnic runworker` -- runs a worker process
+    - `omnic runserverworker` -- runs a process that is both server AND worker
+
+# Future
+
+## Queueing
+- [ ] Use: https://github.com/jonathanslenders/asyncio-redis
+- [ ] Allow swapping out asyncio's gimmick-y queuing for a Redis-based queue
+  (should be easy)
+- [ ] Eventually allow attachment of full traditional task-queueing backend
+
+## Rendering services
+- [ ] StringResource - A type of resource where the contents is a short string,
+  already in memory
+
+- [ ] /render/ Service - A service that takes in StringResources and outputs
+  other things.
+    - Example: `/render/osm-geo:79.1239,32.231345,12/thumb.png:200x300/` --- This
+      would render Open Street Map into an image, and then use the PNG -> Thumb
+      converter to resize to the right size
+    - Example: `/render/text3d:"Hello World!"/webm:200x300/` --- This would
+      generate Hello World text as 3D shape (obj file), then use the OBJ ->
+      WEBM to make a rotating image
+
+
+## Bundling service
+- [ ] zip, tar.gz, tar.bz2, 7z - all bundle formats
+- [ ] /bundle/ Service - A service that takes in an URL to a json manifest
+  file, which contains an array of files and conversion destinations to be
+  processed.
+    - Example: [
+        {
+            "url": "http://host.com/file.png",
+            "path": "media/image/file.png",
+            "type": "JPG"
+        },
+        ...
+    ]
+
+## WebSocket RPC service
+- [ ] /ws/ Service - Exposes all other services via a websocket RPC-like
+  interface. Useful for creating more involved progress-bar UIs etc and
+  pre-caching longer-running processes
+    - Still would have no trust, simply exposing the public HTTP interface in
+      another way, for more involved front-end applications
+    - Example:
+        - `< "media", {url: "foo.com/bar.pdf", typestring="thumb.png"}`
+        - `> "downloaded", {url: "foo.com/bar.pdf"}`
+        - `> "converting", {url: "foo.com/bar.pdf", type="PNG"}`
+        - `> "converting", {url: "foo.com/bar.pdf", type="thumb.png"}`
+        - `> "ready", {url: "foo.com/bar.pdf"}`
+        - `< "bundle", {url: "foo.com/bar.json"}`
+        - `> "in-progress", {url: "foo.com/bar.json"}`
+        - `> "downloaded", {url: "foo.com/bar.json"}`
+        - `> "downloaded", {url: "foo.com/bar.json"}`
+
+## JS converter
+- [ ] Minifier and JSX / TypeScript compiler
+- [ ] Possibly a service dedicated to this, or just use /bundle/ wit ha
+  different target type ('js')
+- [ ] Eliminate build steps for web... stateless serving for all!
+
+## Packaging build server Converters
+- [ ] Would play-well with /bundle/
+- [ ] Convert "tar.gz" -> rpm, deb, appimage, flatpak etc
+- [ ] Convert "python-project.git" -> rpm, deb, appimage, flatpak etc
+- [ ] Convert "electron-project.git" -> rpm, deb, appimage, flatpak etc
+- [ ] Maybe even EXE generator o.O
+- [ ] Maybe loop in GameBuildr stuff..?
+
+
+## Mesh
 
 - Possibly create a JSC3D node module port / fork that uses `node-canvas`, and
   expose a CLI that can render (via software) STL models and such
