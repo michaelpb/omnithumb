@@ -21,6 +21,7 @@ class HardLinkConverter(converter.HardLinkConverter):
     inputs = ['JPEG']
     outputs = ['JPG']
 
+
 class ExecConverter(converter.ExecConverter):
     inputs = ['JPEG']
     outputs = ['JPG']

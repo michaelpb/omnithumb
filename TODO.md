@@ -55,10 +55,17 @@ Could do test first development for all of this.
     - e.g. There should be one for all image types that is just a single pixel
       PNG
 
+# Build out contrib
+- [ ] Build out the thumb converter
+
 - [ ] Build out the media service
     - The media service route has a TypeString in the URL
     - The media service route responds with the converted file, OR a
       placeholder file for that TypeString
+
+- [ ] Build out a default settings so it can be run for the original demo
+
+- [ ] Clean up old thumb demo
 
 # QoL improvements
 
@@ -68,6 +75,10 @@ Could do test first development for all of this.
     - Not usable on Converters, presently, since it would impair creation of
       ConverterGraph
 
+- [ ] Built-in lists of common formats to be used, along with common
+  placeholder pixels
+
+- [ ] Built-in regexp for TypeString
 
 # Misc other programs
 

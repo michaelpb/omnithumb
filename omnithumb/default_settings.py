@@ -1,19 +1,17 @@
-from omnithumb.old_utils import Type
-#from omnithumb.thumb import ThumbType
+from omnithumb.contrib.converters.thumb import PILThumb
+#from omnithumb.contrib.placeholders import PNGPixel
 
 SERVICES = [
-    'omnithumb.services.thumb',
-    'omnithumb.services.media',
+    'omnithumb.contrib.services.media',
 ]
 
-# TODO Define various types
-TYPES = [
+CONVERTERS = [
+    PILThumb,
 ]
 
-# TODO Define how to get from type A to type B, which is used to create a
-# directed graph of all types
-PIPELINES = [
-    'omnithumb.pipelines.thumb',
+
+PLACEHOLDERS = [
+    #PNGPixel,
 ]
 
 PATH_PREFIX = '/tmp/omnithumb/'

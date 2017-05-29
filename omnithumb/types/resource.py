@@ -86,6 +86,9 @@ class TypedForeignResource(Resource):
         base, _ = os.path.splitext(self.url_path_basename)
         return self.typestring.modify_basename(base)
 
+    def symlink_from(self, foreign_resource):
+        os.symlink(foreign_resource.cache_path, self.cache_path)
+
 
 class TypedResource(Resource):
     def __init__(self, config, url, typestring):
@@ -94,7 +97,6 @@ class TypedResource(Resource):
 
     def _get_basename(self):
         return self.typestring.modify_basename(self.url_path_basename)
-
 
 class URLError(ValueError): pass
 class CacheError(RuntimeError): pass

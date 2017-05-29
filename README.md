@@ -29,14 +29,16 @@ resemble production environments, however it is very close.
     * You will need to do this any time you want to work
 4. Install dependencies:
     * `pip install -r requirements/local.txt`
-5. Start the server:
+5. (Optional) Run test suite:
+    * `py.test`
+6. Start the server:
     * `python manage.py runserver`
 
-To test it, try visiting:
-* http://localhost:8080/thumb/?width=100&height=100&url=unsplash.it/1010/1010
+To test it, try visiting something like:
+* http://localhost:8080/media/thumb.png:200x200/?url=unsplash.it/450/450
 
 The first time you visit it it will just be a single placeholder pixel.
-Subsequent times it should be 100x100 thumbnail
+Subsequent times it should be 200x200 thumbnail
 
 ## With Docker
 
