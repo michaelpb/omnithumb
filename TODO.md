@@ -111,16 +111,21 @@ Could do test first development for all of this.
     - `omnic scaffold new-service` -- ditto
 
 - [ ] Redis-only commands:
-    - `omnic runworker` -- runs a worker process
+    - `omnic runworker` -- runs a worker-only process
     - `omnic runserverworker` -- runs a process that is both server AND worker
+    - `omnic runmulti --worker=1 --server=1 --serverworker=2` -- runs X
+      processes of the given types
+
+- [ ] Test suite for CLI
 
 # Future
 
 ## Queueing
-- [ ] Use: https://github.com/jonathanslenders/asyncio-redis
-- [ ] Allow swapping out asyncio's gimmick-y queuing for a Redis-based queue
-  (should be easy)
-- [ ] Eventually allow attachment of full traditional task-queueing backend
+- [ ] Use: `aioredis` package
+- [ ] Allow swapping out asyncio's gimmick-y queuing for a custom-made
+  Redis-based async queue (should be easy)
+- [ ] Eventually allow attachment of any arbitrary traditional task-queueing
+  backend
 
 ## Rendering services
 - [ ] StringResource - A type of resource where the contents is a short string,
@@ -183,7 +188,7 @@ Could do test first development for all of this.
 
 
 ## Mesh
-
+- Blender integration
 - Possibly create a JSC3D node module port / fork that uses `node-canvas`, and
   expose a CLI that can render (via software) STL models and such
 
