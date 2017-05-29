@@ -5,6 +5,8 @@
 
 # OmniThumb
 
+![Travis CI](https://travis-ci.org/michaelpb/omnithumb.svg?branch=master)
+
 Mostly stateless microservice for generating on-the-fly thumbs and previews of
 a wide variety of file types.
 
