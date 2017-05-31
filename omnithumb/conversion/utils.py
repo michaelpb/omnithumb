@@ -3,7 +3,7 @@ from omnithumb.types.resource import TypedResource, ForeignResource, TypedLocalR
 
 async def convert(config, uri, to_type, enqueue_method=None, download_method=None):
     if uri.startswith('/'):
-        # File protocol, 
+        # Absolute path to a file, use local everything
         typed_foreign_res = TypedLocalResource(config, uri)
         resource_class = TypedLocalResource
     else:
@@ -23,7 +23,7 @@ async def convert(config, uri, to_type, enqueue_method=None, download_method=Non
 
     # Now find path between types
     original_ts = typed_foreign_res.typestring
-    path = config.converter_graph.find_path(original_ts, target_ts)
+    path = config.converter_graph.find_path(original_ts, to_type)
 
     # Loop through each step in graph path and convert
     is_first = True

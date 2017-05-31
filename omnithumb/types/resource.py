@@ -119,20 +119,25 @@ class TypedResource(Resource):
 class TypedLocalResource(Resource):
     def __init__(self, config, path, typestring=None):
         self.path = path
-        super().__init__(config, 'file://%s' % url)
 
-        # Set up paths
         if typestring:
+            # TypeString specified: not foreign, should munge path
+            self.foreign = False
+        else:
+            # No TypeString specified: foreign, keep path but guess type
             self.foreign = True
             typestring = guess_typestring(path)
+
+        self.typestring = typestring
+        super().__init__(config, 'file://%s' % path)
+
+        if self.foreign:
             self.cache_path = path
         else:
-            self.foreign = False
-            self.cache_path = os.path.join([
+            self.cache_path = os.path.join(
                 os.path.dirname(path),
                 self._get_basename(),
-            ])
-        self.typestring = typestring
+            )
 
     def _get_basename(self):
         if self.foreign:

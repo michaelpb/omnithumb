@@ -24,7 +24,7 @@ class PILThumb(converter.Converter):
             im = Image.open(orig)
             im.thumbnail(size)
         with thumb_resource.cache_open('wb') as target:
-            im.save(target, 'JPEG')
+            im.save(target)
 
     async def convert(self, in_resource, out_resource):
         size = self.default_size

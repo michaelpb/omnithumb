@@ -4,8 +4,6 @@ import importlib
 import uvloop
 import asyncio
 
-from omnithumb.conversion.converter import ConverterGraph
-from omnithumb.responses.placeholder import PlaceholderSelector
 from omnithumb.worker import AioWorker
 from omnithumb.worker import Task
 
@@ -53,8 +51,6 @@ def runserver(settings, host, port, debug=False):
     global app
     app = Sanic(__name__)
     register_all(settings, settings.SERVICES)
-    settings.converter_graph = ConverterGraph(settings.CONVERTERS)
-    settings.placeholders = PlaceholderSelector(settings)
 
     # Set up loop + queue
     loop = uvloop.new_event_loop()
