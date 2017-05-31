@@ -26,9 +26,9 @@ class PILThumb(converter.Converter):
         with thumb_resource.cache_open('wb') as target:
             im.save(target, 'JPEG')
 
-    def convert(self, in_resource, out_resource):
+    async def convert(self, in_resource, out_resource):
         size = self.default_size
-        arguments= out_resource.typestring.arguments
+        arguments = out_resource.typestring.arguments
         if arguments:
             width_s, _, height_s = arguments[0].partition('x')
             size = (int(width_s), int(height_s))

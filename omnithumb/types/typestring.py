@@ -7,7 +7,7 @@ import mimetypes
 
 import magic
 
-UNKNOWN_MIMETYPE = 'application/x-empty'
+UNKNOWN_MIMETYPE = ('application/x-empty', 'application/octet-stream')
 
 class TypeString:
     def __init__(self, s):
@@ -60,7 +60,7 @@ def guess_typestring(path):
     '''
     with open(path, 'rb') as fd:
         mimetype = magic.from_buffer(fd.read(128), mime=True)
-        if mimetype and mimetype != UNKNOWN_MIMETYPE:
+        if mimetype and mimetype not in UNKNOWN_MIMETYPE:
             return TypeString(mimetype)
 
     # Otherwise, tries based on extension

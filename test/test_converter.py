@@ -102,7 +102,7 @@ class ConverterTestBase:
         except OSError: pass
 
     def _check_convert(self):
-        self.converter.convert(self.res, self.res2)
+        self.converter.convert_sync(self.res, self.res2)
         assert self.res2.cache_exists()
         with self.res2.cache_open() as f:
             assert f.read() == JPG_TEST_BYTES

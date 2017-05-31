@@ -7,7 +7,7 @@ from sanic import response
 from sanic import Sanic
 
 from omnithumb.types.typestring import TypeString
-from omnithumb.types.resource import TypedResource, ForeignResource
+from omnithumb.types.resource import TypedResource, TypedForeignResource, ForeignResource
 
 class ServiceMeta:
     NAME = 'media'
@@ -34,11 +34,15 @@ def enqueue_conversion_path(url_string, to_type):
     path = config.converter_graph.find_path(original_ts, target_ts)
 
     # Loop through each step in graph path and convert
+    is_first = True
     for converter_class, from_ts, to_ts in path:
         converter = converter_class(config)
         in_resource = TypedResource(config, url_string, from_ts)
+        if is_first:
+            in_resource = TypedForeignResource(config, url_string, from_ts)
         out_resource = TypedResource(config, url_string, to_ts)
         ServiceMeta.enqueue_convert(converter, in_resource, out_resource)
+        is_first = False
 
 @ServiceMeta.blueprint.get('/<ts>/')
 async def media_route(request, ts):

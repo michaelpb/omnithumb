@@ -16,7 +16,7 @@ DOWNLOAD_CHUNK_SIZE = 1024
 
 class Worker:
     '''
-    Simple Co-Routine queue consumer
+    Worker base class, for use with coroutines
     '''
     async def run(self):
         while self.running:
@@ -48,14 +48,20 @@ class Worker:
                 log.error('Error in task: "%s"' % repr(e))
 
     async def run_func(self, func, *func_args):
+        '''
+        Runs arbitrary synchronous code
+        '''
         func(*func_args)
 
     async def run_download(self, foreign_resource):
+        '''
+        Downloads a foreign resource asynchronously
+        '''
         url = foreign_resource.url_string
         with foreign_resource.cache_open('wb') as f_handle:
-            await self.download_async(url, f_handle)
+            await self._download_async(url, f_handle)
 
-    async def download_async(self, url, f_handle):
+    async def _download_async(self, url, f_handle):
         with async_timeout.timeout(DOWNLOAD_TIMEOUT):
             async with self.aiohttp.get(url) as response:
                 while True:
@@ -66,8 +72,17 @@ class Worker:
                 return await response.release()
 
     async def run_convert(self, converter, in_resource, out_resource):
-        # TODO make async
-        converter.convert(in_resource, out_resource)
+        '''
+        Converts using the given converter, asynchronously if available,
+        otherwise falls back on sync
+        '''
+        if hasattr(converter, 'convert'):
+            await converter.convert(in_resource, out_resource)
+        elif hasattr(converter, 'convert_sync'):
+            converter.convert_sync(in_resource, out_resource)
+        else:
+            raise ValueError('Invalid converter: %s' % repr(converter))
+
 
 class AioWorker(Worker):
     '''

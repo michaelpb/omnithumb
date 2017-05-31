@@ -1,4 +1,5 @@
 from omnithumb.contrib.converters.thumb import PILThumb
+from omnithumb.contrib.converters.document import Unoconv
 from omnithumb.contrib.responses.placeholders import PNGPixel
 
 SERVICES = [
@@ -7,10 +8,15 @@ SERVICES = [
 
 CONVERTERS = [
     PILThumb,
+    Unoconv,
 ]
+
+class CatchAll(PNGPixel):
+    types = all
 
 PLACEHOLDERS = [
     PNGPixel,
+    CatchAll,
 ]
 
 PATH_PREFIX = '/tmp/omnithumb/'

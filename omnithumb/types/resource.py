@@ -99,6 +99,8 @@ class TypedForeignResource(Resource):
         return self.typestring.modify_basename(base)
 
     def symlink_from(self, foreign_resource):
+        if foreign_resource.cache_path == self.cache_path:
+            return
         os.symlink(foreign_resource.cache_path, self.cache_path)
 
 

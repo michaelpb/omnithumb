@@ -42,6 +42,11 @@ To test it, try visiting something like:
 The first time you visit it it will just be a single placeholder pixel.
 Subsequent times it should be 200x200 thumbnail
 
+You might also be able to run this:
+* `http://localhost:8080/media/PDF/?url=idee.org/Georgia_opposition_NATO-Eng-F.doc`
+
+This will convert the `.doc` into a PDF
+
 ## With Docker
 
 1. TODO: Add in docker compose files for getting this bad boy up and

@@ -30,20 +30,20 @@ class ExecConverter(Converter):
         # Returns list of truthy replaced arguments in command
         return [replacements.get(arg, arg) for arg in self.command]
 
-    # TODO: Fix this, figure out how to test
-    #async def convert(self, in_resource, out_resource):
-    #    cmd = self.get_command(in_resource, out_resource)
-    #    return asyncio.create_process_exec(*cmd)
+    async def convert(self, in_resource, out_resource):
+        return self.convert_sync(in_resource, out_resource)
+
+        # TODO: make async
+        cmd = self.get_command(in_resource, out_resource)
+        return subprocess.run(cmd)
 
     def convert_sync(self, in_resource, out_resource):
         cmd = self.get_command(in_resource, out_resource)
         return subprocess.run(cmd)
 
-    convert = convert_sync
-
 
 class HardLinkConverter(Converter):
-    def convert(self, in_resource, out_resource):
+    def convert_sync(self, in_resource, out_resource):
         os.link(in_resource.cache_path, out_resource.cache_path)
 
 
