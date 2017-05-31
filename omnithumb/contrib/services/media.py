@@ -17,14 +17,10 @@ class ServiceMeta:
     log = None
     enqueue = None
 
-def process_media_route(url_string, to_type):
+def enqueue_conversion_path(url_string, to_type):
     config = ServiceMeta.config
     target_ts = TypeString(str(to_type))
     foreign_res = ForeignResource(config, url_string)
-
-    if not foreign_res.cache_exists():
-        # TODO: make awaitable
-        foreign_res.download()
 
     # Determine the file type of the foreign resource
     typed_foreign_res = foreign_res.guess_typed()
@@ -37,14 +33,12 @@ def process_media_route(url_string, to_type):
     original_ts = typed_foreign_res.typestring
     path = config.converter_graph.find_path(original_ts, target_ts)
 
-    # TODO: make each conversion a separate task
     # Loop through each step in graph path and convert
     for converter_class, from_ts, to_ts in path:
         converter = converter_class(config)
         in_resource = TypedResource(config, url_string, from_ts)
         out_resource = TypedResource(config, url_string, to_ts)
-        converter.convert(in_resource, out_resource)
-
+        ServiceMeta.enqueue_convert(converter, in_resource, out_resource)
 
 @ServiceMeta.blueprint.get('/<ts>/')
 async def media_route(request, ts):
@@ -61,22 +55,14 @@ async def media_route(request, ts):
                 'Content-Type': target_ts.mimetype,
             })
 
-    #ServiceMeta.enqueue(process_media_route, url_string, target_ts)
-    process_media_route(url_string, target_ts)
+    # Check if the original resource is already downloaded, if not
+    # enqueue the download of that
+    foreign_res = ForeignResource(config, url_string)
+    if not foreign_res.cache_exists():
+        ServiceMeta.enqueue_download(foreign_res)
 
-    # TODO: Convert to a Placeholder
-    PIXEL_B64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
-    PIXEL_B = b64decode(PIXEL_B64)
-
-    async def stream_pixel(response):
-        response.write(PIXEL_B)
-
-    # Respond with placeholder
-    return response.stream(stream_pixel, content_type='image/png')
-
-    # TODO:
-    return config.placeholders.stream_response(response, target_ts)
-
-
-
+    # Enqueue a single function that will in turn enqueue the remaining
+    # conversion process
+    ServiceMeta.enqueue_sync(enqueue_conversion_path, url_string, target_ts)
+    return config.placeholders.stream_response(target_ts, response)
 

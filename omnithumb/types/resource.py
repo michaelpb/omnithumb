@@ -1,8 +1,6 @@
 import hashlib
 import os
 import shutil
-import asyncio
-import heapq
 from itertools import zip_longest
 from urllib.parse import urlparse
 
@@ -55,6 +53,9 @@ class Resource:
     def cache_exists(self):
         return os.path.exists(self.cache_path)
 
+    def __hash__(self):
+        return hash(self.md5)
+
 
 class ForeignResource(Resource):
     def _get_basename(self):
@@ -97,6 +98,9 @@ class TypedResource(Resource):
 
     def _get_basename(self):
         return self.typestring.modify_basename(self.url_path_basename)
+
+    def __hash__(self):
+        return hash(self.md5 + str(self.typestring))
 
 class URLError(ValueError): pass
 class CacheError(RuntimeError): pass

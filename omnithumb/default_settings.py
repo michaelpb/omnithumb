@@ -1,5 +1,5 @@
 from omnithumb.contrib.converters.thumb import PILThumb
-#from omnithumb.contrib.placeholders import PNGPixel
+from omnithumb.contrib.responses.placeholders import PNGPixel
 
 SERVICES = [
     'omnithumb.contrib.services.media',
@@ -9,9 +9,8 @@ CONVERTERS = [
     PILThumb,
 ]
 
-
 PLACEHOLDERS = [
-    #PNGPixel,
+    PNGPixel,
 ]
 
 PATH_PREFIX = '/tmp/omnithumb/'

@@ -56,6 +56,8 @@ Could do test first development for all of this.
       PNG
 
 # Build out contrib
+
+## Thumb / media proof of concept
 - [X] Build out the thumb converter
 
 - [X] Build out the media service
@@ -65,9 +67,13 @@ Could do test first development for all of this.
 
 - [X] Build out a default settings so it can be run for the original demo
 
+- [X] Contrib placeholder
+
 - [ ] Polish up and add tests for above
 
 - [ ] Delete old thumb demo code
+
+## General case
 
 # QoL improvements
 
@@ -184,7 +190,7 @@ Could do test first development for all of this.
 - [ ] Convert "python-project.git" -> rpm, deb, appimage, flatpak etc
 - [ ] Convert "electron-project.git" -> rpm, deb, appimage, flatpak etc
 - [ ] Maybe even EXE generator o.O
-- [ ] Maybe loop in GameBuildr stuff..?
+- [ ] Maybe loop in game stuff..?
 
 
 ## Mesh
