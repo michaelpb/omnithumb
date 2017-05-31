@@ -34,7 +34,7 @@ resemble production environments, however it is very close.
 5. (Optional) Run test suite:
     * `py.test`
 6. Start the server:
-    * `python manage.py runserver`
+    * `./bin/omnic runserver`
 
 To test it, try visiting something like:
 * http://localhost:8080/media/thumb.png:200x200/?url=unsplash.it/450/450
