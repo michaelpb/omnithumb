@@ -69,9 +69,10 @@ Could do test first development for all of this.
 
 - [X] Contrib placeholder
 
+- [X] Delete old thumb demo code
+
 - [ ] Polish up and add tests for above
 
-- [ ] Delete old thumb demo code
 
 ## General case
 

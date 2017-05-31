@@ -22,6 +22,7 @@ class Worker:
         while self.running:
             # Queue up consuming next item
             task_type, args = await self.queue.get()
+            method = None
 
             # Determine the type of task, and possibly skip if we have
             # it "locked" that we are already doing it
@@ -30,13 +31,13 @@ class Worker:
 
             elif task_type == Task.DOWNLOAD:
                 if not await self.check_download(*args):
-                    log.debug('Already downloading %s' % repr(task_args))
+                    log.debug('Already downloading %s' % repr(args))
                     continue
                 method = self.run_download
 
             elif task_type == Task.CONVERT:
                 if not await self.check_convert(*args):
-                    log.debug('Already converting %s' % repr(task_args))
+                    log.debug('Already converting %s' % repr(args))
                     continue
                 method = self.run_convert
 
@@ -89,16 +90,15 @@ class AioWorker(Worker):
         return await self.queue.get()
 
     async def check_download(self, foreign_resource):
-        return True # TODO
         if foreign_resource in self.downloading_resources:
             return False
         self.downloading_resources.add(foreign_resource)
         return True
 
     async def check_convert(self, converter, in_r, out_r):
-        return True # TODO
-        if (in_r, out_r) in self.converting_resources:
+        key = (in_r, out_r)
+        if key in self.converting_resources:
             return False
-        self.converting_resources.add((in_r, out_r))
+        self.converting_resources.add(key)
         return True
 

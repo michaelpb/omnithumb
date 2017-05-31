@@ -54,7 +54,18 @@ class Resource:
         return os.path.exists(self.cache_path)
 
     def __hash__(self):
-        return hash(self.md5)
+        return hash(self.url_string)
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return hash(self) == hash(other)
+        return NotImplemented
+
+    def __ne__(self, other):
+        if isinstance(other, self.__class__):
+            return not self.__eq__(other)
+        return NotImplemented
+
 
 
 class ForeignResource(Resource):
@@ -100,7 +111,8 @@ class TypedResource(Resource):
         return self.typestring.modify_basename(self.url_path_basename)
 
     def __hash__(self):
-        return hash(self.md5 + str(self.typestring))
+        return hash('%s - %s' % (self.url_string, str(self.typestring)))
+
 
 class URLError(ValueError): pass
 class CacheError(RuntimeError): pass
