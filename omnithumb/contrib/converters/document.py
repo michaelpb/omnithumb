@@ -1,6 +1,6 @@
 from omnithumb.types.typestring import TypeString
 from omnithumb.types.resource import TypedResource
-from omnithumb.types import converter
+from omnithumb.conversion import converter
 
 class Unoconv(converter.ExecConverter):
     inputs = [

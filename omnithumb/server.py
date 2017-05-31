@@ -4,7 +4,7 @@ import importlib
 import uvloop
 import asyncio
 
-from omnithumb.types.converter import ConverterGraph
+from omnithumb.conversion.converter import ConverterGraph
 from omnithumb.responses.placeholder import PlaceholderSelector
 from omnithumb.worker import AioWorker
 from omnithumb.worker import Task

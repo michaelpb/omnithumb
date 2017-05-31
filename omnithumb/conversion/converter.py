@@ -4,7 +4,7 @@ import subprocess
 
 from omnithumb.utils.graph import DirectedGraph
 from omnithumb.utils.iter import pair_looper
-from .typestring import TypeString
+from omnithumb.types.typestring import TypeString
 
 class Converter:
     cost = 1

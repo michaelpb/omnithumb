@@ -2,7 +2,7 @@ from PIL import Image
 
 from omnithumb.types.typestring import TypeString
 from omnithumb.types.resource import TypedResource
-from omnithumb.types import converter
+from omnithumb.conversion import converter
 
 class PILThumb(converter.Converter):
     inputs = [

@@ -9,7 +9,7 @@ from base64 import b64decode
 
 from omnithumb.types.typestring import TypeString
 from omnithumb.types.resource import TypedResource
-from omnithumb.types import converter
+from omnithumb.conversion import converter
 
 URL = 'http://mocksite.local/file.png'
 JPG_TEST_BYTES = bytes([0xff, 0xd8, 0xff, 0xe0])

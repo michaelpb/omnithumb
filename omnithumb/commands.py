@@ -25,13 +25,15 @@ def runserver(port, ip, debug):
     # TODO: add reloading, add environ 
     app.run(host=ip, port=port, debug=debug)
 
+async def convert(in_file, out_type):
+    pass
+
 @cmds.command()
-def test():
+@click.argument('file', required=True)
+@click.argument('type', required=True)
+def convert(file, type):
     # TODO: add running of tests
     pass
 
 def main():
-    cmds()
-
-if __name__ == "__main__":
     cmds()
