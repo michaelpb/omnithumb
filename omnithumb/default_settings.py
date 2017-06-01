@@ -1,5 +1,5 @@
 from omnithumb.contrib.converters.thumb import PILThumb
-from omnithumb.contrib.converters.document import Unoconv
+from omnithumb.contrib.converters.document import Unoconv, ImageMagickPageRasterizer
 from omnithumb.contrib.responses.placeholders import PNGPixel
 
 SERVICES = [
@@ -9,6 +9,7 @@ SERVICES = [
 CONVERTERS = [
     PILThumb,
     Unoconv,
+    ImageMagickPageRasterizer,
 ]
 
 class CatchAll(PNGPixel):

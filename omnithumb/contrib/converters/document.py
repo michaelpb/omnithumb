@@ -34,18 +34,18 @@ class Unoconv(converter.ExecConverter):
         'PPTX',
 
         'application/msword',
+        'application/vnd.oasis.opendocument.text',
         # TODO: remove this
-        'application/octet-stream',
+        #'application/octet-stream',
     ]
 
     outputs = [
         'PDF',
         'application/pdf',
-        'PNG',
-        'image/png',
     ]
 
     command = [
+        # TODO fix running unoconv within venv
         '/usr/bin/python3',
         '/usr/bin/unoconv',
         '-f',
@@ -57,3 +57,23 @@ class Unoconv(converter.ExecConverter):
 
     def get_arguments(self, out_resource):
         return [out_resource.typestring.extension.lower()]
+
+class ImageMagickPageRasterizer(converter.ExecConverter):
+    inputs = [
+        # Document
+        'PDF',
+        'PS',
+        'application/pdf',
+        'application/postscript',
+    ]
+
+    outputs = [
+        'PNG',
+        'image/png',
+    ]
+
+    command = [
+        'convert',
+        '$IN',
+        '$OUT',
+    ]
