@@ -66,6 +66,11 @@ class CleanUpAudio(converter.HardLinkConverter):
     inputs = ['MP3', 'WAV', 'OGG']
     outputs = ['cleaned.ogg']
 
+class CleanUpAudio(converter.HardLinkConverter):
+    inputs = ['JPG']
+    outputs = ['png']
+    def get_output_name(self, in_res, out_res):
+        return 'output.png'
 
 class MockConfig:
     PATH_GROUPING = 'MD5'

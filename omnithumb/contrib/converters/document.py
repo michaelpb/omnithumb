@@ -74,6 +74,13 @@ class ImageMagickPageRasterizer(converter.ExecConverter):
 
     command = [
         'convert',
+        '$0',
         '$IN',
-        '$OUT',
     ]
+
+    def get_arguments(self, out_resource):
+        page_number = 0
+        source = '%s[%i]' % (out_resource.cache_path, page_number)
+        return [source]
+
+

@@ -1,59 +1,24 @@
-# OmniThumb high level structure
+# Next steps:
 
-Could do test first development for all of this.
+- [ ] Finish doc -> thumb proof of concept
+    - [ ] ExecConverter needs a "rename from" feature, that allows you to
+      specify an output file that differs in name from the one that is expected
 
-- [X] Build the "TypeString" system, as follows:
-    - TypeString is a superset of mimetype
-    - TypeStrings are encoded as follows:
+- [ ] Need a few more file types to provide proper proof of concept
+    - [X] DOC -> PDF
+    - [ ] PDF first page -> PNG (depends on above)
+    - [ ] OBJ/STL/MESH -> STL (meshlab)
 
-        type string   = format | format ":" argument list;
-        format        = mimetype | extension | qualifier;
-        mimetype      = [a-z]+"/"[a-z]+;
-        extension     = [A-Z]+;                           // e.g. STL, PNG, JPEG
-        qualifier     = [a-z]+;                           // e.g. thumb
-        argument list = value | value "," argument list;
-        value         = [a-z0-9]+;
+- [ ] Build out full integration tests for contrib
 
-- [X] Build TypeString tools
-    - Guess TypeString from a given input file
-    - Output mimetype if it can be easily determined, otherwise extension
+- [ ] Work on some very simple refresh javascript to integrate
 
-- [X] Create ForeignResource class
-    - A ForeignResource is a URL, and can be converted to a Resource by
-      guessing a TypeString from it
 
-- [X] Create TypedResource class
-    - A TypedResource is a URL and a TypeString
-    - TypedResources have a property `cache_path`, which is where to cache this
-      file
+# Look into 3D rendering
 
-- [X] Build Converter base class
-    - Converters have a list of input type strings formats (excluding
-      argument list)
-    - Converters have a list of output type string format
-    - Converters can have a constant estimated conversion time, with 1 being
-      fast and large numbers being slow (defaults to 1)
-    - Converters have a `convert(in : TypedResource, out : TypedResource)`
-      method which will attempt to convert the given resource into the given
-      output TypeString. The `to_type` in this case can include arguments.
-
-- [X] Build ConverterGraph class
-    - ConverterGraph takes in a list of converters and builds a graph from it
-    - ConverterGraph has a method `find_conversion_path(from : TypeString, to :
-      TypeString)` outputs an array in the following format, OR raises a
-      `ConverterGraph.NoPathFound` exception:
-
-        [
-            (Converter, TypeString, TypeString),
-            (Converter, TypeString, TypeString),
-            ...
-        ]
-
-- [X] Build PlaceHolderResponse class
-    - PlaceHolderResponse has a list of type string formats that it can
-      generate place-holder reponses of
-    - e.g. There should be one for all image types that is just a single pixel
-      PNG
+- [ ] Work on JSC3D CLI
+    - [ ] Integrate JSC3D with node canvas
+    - [ ] STL -> PNG
 
 # Build out contrib
 
@@ -73,22 +38,6 @@ Could do test first development for all of this.
 
 - [ ] Polish up and add tests for above
 
-
-## General case
-
-# QoL improvements
-
-- [ ] TypeStringMatcher
-    - Can match based on mimetype categories, or custom properties
-    - Usable on Placeholders
-    - Not usable on Converters, presently, since it would impair creation of
-      ConverterGraph
-
-- [ ] Built-in lists of common formats to be used, along with common
-  placeholder pixels
-
-- [ ] Built-in regexp for TypeString
-
 # CLI and packaging
 - [ ] Decide on name: e.g. `OmniConverter`, or `omnic` for short. Move to
   /omnic/ repo then
@@ -97,12 +46,12 @@ Could do test first development for all of this.
     - [ ] Add to setup.py only the minimum needed packages
     - [ ] Document which packages needed for which contrib stuff
 
-- [ ] Document The Three Uses:
+- [ ] Document the three uses:
+    - CLI and library - Include in other projects (e.g. Django, Celery) as a
+      useful conversion utility
     - Ready-to-go server - Provide docker container to spin up behind nginx,
       using env variables to configure, only providing a settings.py file if
       necessary
-    - CLI and library" - Include in other projects (e.g. Django,
-      Celery) as a useful conversion utility
     - Web media conversion framework - In the manner of Django, Flask, etc have
       a cookiecutter example of setting up an new project, and hooking in your
       own Services and Converters
@@ -124,6 +73,17 @@ Could do test first development for all of this.
       processes of the given types
 
 - [ ] Test suite for CLI
+
+
+# Admin and demo
+### Add numbers to task system
+
+### Demo service
+- [ ] Allow file to be uploaded
+
+### Admin service
+- [ ] Admin panel should use /ws/ backend to provide a graphical view of the
+  process of files being ingested
 
 # Future
 
@@ -198,4 +158,17 @@ Could do test first development for all of this.
 - Blender integration
 - Possibly create a JSC3D node module port / fork that uses `node-canvas`, and
   expose a CLI that can render (via software) STL models and such
+
+# QoL improvements
+
+- [ ] TypeStringMatcher
+    - Can match based on mimetype categories, or custom properties
+    - Usable on Placeholders
+    - Not usable on Converters, presently, since it would impair creation of
+      ConverterGraph
+
+- [ ] Built-in lists of common formats to be used, along with common
+  placeholder pixels
+
+- [ ] Built-in regexp for TypeString
 
