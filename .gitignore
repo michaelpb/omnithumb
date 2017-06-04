@@ -63,3 +63,5 @@ staticfiles/
 
 .cache/*
 .cache/
+
+tmp/

@@ -41,6 +41,16 @@ class ExecConverterWithArgs(ExecConverter):
     ]
 
 
+class ExecConverterWithOutputFilename(ExecConverter):
+    command = [
+        'mv',
+        '$IN',
+        '_tmp_output_file',
+    ]
+    def get_output_filename(self, in_res, out_res):
+        return '_tmp_output_file'
+
+
 # Set up system of dummy converters
 class ConvertMovieToImage(converter.HardLinkConverter):
     inputs = ['MOV', 'AVI', 'MP4']
@@ -65,12 +75,6 @@ class Convert3DGraphicsToImage(converter.HardLinkConverter):
 class CleanUpAudio(converter.HardLinkConverter):
     inputs = ['MP3', 'WAV', 'OGG']
     outputs = ['cleaned.ogg']
-
-class CleanUpAudio(converter.HardLinkConverter):
-    inputs = ['JPG']
-    outputs = ['png']
-    def get_output_name(self, in_res, out_res):
-        return 'output.png'
 
 class MockConfig:
     PATH_GROUPING = 'MD5'
@@ -130,6 +134,11 @@ class TestExecConverter(ConverterTestBase):
         self.converter = ExecConverterWithArgs(self.config)
         self._check_convert()
         assert os.path.islink(self.res2.cache_path)
+
+    def test_convert_with_custom_filename(self):
+        self.res2 = TypedResource(self.config, URL, TypeString('JPG'))
+        self.converter = ExecConverterWithOutputFilename(self.config)
+        self._check_convert()
 
 
 class TestBasicConverterGraph(ConverterTestBase):

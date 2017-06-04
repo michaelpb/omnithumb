@@ -1,8 +1,8 @@
 import hashlib
 import os
 import shutil
-from itertools import zip_longest
 from urllib.parse import urlparse
+from omnithumb.utils.iter import group_by
 
 import requests
 
@@ -44,10 +44,16 @@ class Resource:
             return group_by(self.md5, 8)
         return ['']
 
+    def cache_makedirs(self):
+        '''
+        Make necessary directories to hold cache value
+        '''
+        dirname = os.path.dirname(self.cache_path)
+        os.makedirs(dirname, exist_ok=True)
+
     def cache_open(self, mode='rb'):
         if mode == 'wb':
-            dirname = os.path.dirname(self.cache_path)
-            os.makedirs(dirname, exist_ok=True)
+            self.cache_makedirs()
         return open(self.cache_path, mode=mode)
 
     def cache_exists(self):
@@ -130,24 +136,30 @@ class TypedLocalResource(Resource):
 
         self.typestring = typestring
         super().__init__(config, 'file://%s' % path)
-
         if self.foreign:
-            self.cache_path = path
-        else:
-            self.cache_path = os.path.join(
-                os.path.dirname(path),
-                self._get_basename(),
-            )
+            self.cache_path = self.path
 
     def _get_basename(self):
         if self.foreign:
             return os.path.basename(self.path)
         else:
-            base, _ = os.path.splitext(self.path)
-            return self.typestring.modify_basename(base)
+            return self.typestring.modify_basename(self.url_path_basename)
 
     def __hash__(self):
         return hash(self.path)
+
+
+class TypedPathedLocalResource(TypedLocalResource):
+    def __init__(self, config, path, typestring):
+        super().__init__(config, path, typestring)
+        self.cache_path = os.path.join(
+            os.path.dirname(path),
+            self._get_basename(),
+        )
+
+    def _get_basename(self):
+        base, _ = os.path.splitext(self.path)
+        return self.typestring.modify_basename(base)
 
 
 class URLError(ValueError): pass
@@ -158,7 +170,3 @@ def check_url(config, url):
     if config.ALLOWED_LOCATIONS == '*':
         return True
     return url.netloc in config.ALLOWED_LOCATIONS
-
-def group_by(iterable, n, fill=None):
-    args = [iter(iterable)] * n
-    return list(''.join(s) for s in zip_longest(*args, fillvalue=fill))

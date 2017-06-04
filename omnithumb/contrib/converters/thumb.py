@@ -16,7 +16,10 @@ class PILThumb(converter.Converter):
         'image/png',
         'image/bitmap',
     ]
-    outputs = ['thumb.png']
+    outputs = [
+        'thumb.png',
+        'thumb.jpg',
+    ]
     default_size = (200, 200)
 
     def generate_thumb(self, size, orig_resource, thumb_resource):
@@ -24,7 +27,18 @@ class PILThumb(converter.Converter):
             im = Image.open(orig)
             im.thumbnail(size)
         with thumb_resource.cache_open('wb') as target:
-            im.save(target)
+            if thumb_resource.typestring.ts_format == 'thumb.jpg':
+                # Ensure it has no alpha before saving
+                if im.mode in ('RGBA', 'LA') or (im.mode == 'P' and 'transparency' in im.info):
+                    alpha = im.convert('RGBA').split()[-1]
+                    no_alpha = Image.new("RGB", im.size, (255, 255, 255))
+                    no_alpha.paste(im, mask=alpha)
+                    no_alpha.save(target, 'JPEG')
+                else:
+                    im.save(target, 'JPEG')
+            else:
+                # Save as is
+                im.save(target)
 
     async def convert(self, in_resource, out_resource):
         size = self.default_size

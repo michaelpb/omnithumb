@@ -1,3 +1,5 @@
+import os
+
 from omnithumb.types.typestring import TypeString
 from omnithumb.types.resource import TypedResource
 from omnithumb.conversion import converter
@@ -74,8 +76,8 @@ class ImageMagickPageRasterizer(converter.ExecConverter):
 
     command = [
         'convert',
-        '$0',
         '$IN',
+        '$0',
     ]
 
     def get_arguments(self, out_resource):
@@ -83,4 +85,10 @@ class ImageMagickPageRasterizer(converter.ExecConverter):
         source = '%s[%i]' % (out_resource.cache_path, page_number)
         return [source]
 
+    def get_output_filename(self, in_resource, out_resource):
+        dirname = os.path.dirname(out_resource.cache_path)
+        basename = os.path.basename(out_resource.cache_path)
+        basename_base, _ = os.path.splitext(basename)
+        suffix = '0.png'
+        return os.path.join(dirname, '%s-%s' % (basename_base, suffix))
 

@@ -39,7 +39,20 @@ class ExecConverter(Converter):
 
     def convert_sync(self, in_resource, out_resource):
         cmd = self.get_command(in_resource, out_resource)
-        return subprocess.run(cmd)
+
+        # Ensure directories are created
+        in_resource.cache_makedirs()
+        out_resource.cache_makedirs()
+
+        # Run the command itself
+        result = subprocess.run(cmd)
+
+        # If the command uses a non-standard path, fix by renaming it
+        if hasattr(self, 'get_output_filename'):
+            output_fn = self.get_output_filename(in_resource, out_resource)
+            os.rename(output_fn, out_resource.cache_path)
+        return result
+
 
 
 class HardLinkConverter(Converter):
