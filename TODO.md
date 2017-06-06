@@ -117,16 +117,43 @@
 
 
 # Admin and demo
-### Add numbers to task system
-
-### Demo service
-- [ ] Allow file to be uploaded
 
 ### Admin service
 - [ ] Admin panel should use /ws/ backend to provide a graphical view of the
   process of files being ingested
 
+- [ ] Very simple panel:
+    1. Paste in a URL
+    2. It downloads and converts to TypedForeignResource
+    3. It shows all possible paths from that filetype
+    4. Clicking on one will swap it with an embedded viewer (if
+    applicable)
+
 # Future
+
+## JS viewer system
+
+- First API call looks for all `img[omnic-viewer]` and
+  `img[omnic-embed]` tags and sends 1 AJAX call to check if they are all
+  loaded.
+    - If not, it will add a spinner to all thumbnails of them, and try
+      again in X seconds (V2: could keep running average of every
+      conversion path, and try again in `avg * 1.5` or something)
+    - If loaded, it will check if omnic-viewer, then add a hoverable (>)
+      button in the center, and an onclick event which will activate the
+      appropriate viewer
+    - If possible / cheap computationally, avoid API calls by checking
+      if the image is a 1x1 placeholder image (?)
+- [ ] New Viewer system: Each type can have a Viewer, that serves up JS
+  that mounts a viewer on a particular element (given a URL). E.g. the
+  STL, OBJ etc viewer, when clicked on, will enable JSC3D.
+    - [ ] All registered viewers get served up on page load in one
+      minified JS bundle
+    - [ ] They only get "activated" as needed
+- [ ] Embed in page components
+    - `<img src="...omnic/media/thumb.jpg..." omnic-viewer="PDF" />`
+    - The JS looks for all tags with `[omnic-viewer]` and adds a click
+      event that will embed the correct type of viewer for that element
 
 ## Queueing
 - [ ] Use: `aioredis` package
