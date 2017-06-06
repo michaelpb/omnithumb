@@ -47,7 +47,6 @@ class Unoconv(converter.ExecConverter):
     ]
 
     command = [
-        # TODO fix running unoconv within venv
         '/usr/bin/python3',
         '/usr/bin/unoconv',
         '-f',

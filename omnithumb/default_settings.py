@@ -1,5 +1,8 @@
 from omnithumb.contrib.converters.thumb import PILThumb
 from omnithumb.contrib.converters.document import Unoconv, ImageMagickPageRasterizer
+from omnithumb.contrib.converters.mesh import MeshLabConverter, Jsc3dRenderer
+from omnithumb.contrib.converters.chemical import OpenBabelConverter
+from omnithumb.contrib.converters.vector import InkscapeConverter, InkscapeRasterizer
 from omnithumb.contrib.responses.placeholders import PNGPixel
 
 SERVICES = [
@@ -10,6 +13,11 @@ CONVERTERS = [
     PILThumb,
     Unoconv,
     ImageMagickPageRasterizer,
+    MeshLabConverter,
+    Jsc3dRenderer,
+    OpenBabelConverter,
+    InkscapeConverter,
+    InkscapeRasterizer,
 ]
 
 class CatchAll(PNGPixel):

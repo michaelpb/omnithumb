@@ -1,24 +1,50 @@
 # Next steps:
 
-- [ ] Finish doc -> thumb proof of concept
-    - [ ] ExecConverter needs a "rename from" feature, that allows you to
+- [X] Finish doc -> thumb proof of concept
+    - [X] ExecConverter needs a "rename from" feature, that allows you to
       specify an output file that differs in name from the one that is expected
 
-- [ ] Need a few more file types to provide proper proof of concept
+- [X] Need a few more file types to provide proper proof of concept
     - [X] DOC -> PDF
-    - [ ] PDF first page -> PNG (depends on above)
-    - [ ] OBJ/STL/MESH -> STL (meshlab)
+    - [X] PDF first page -> PNG (depends on above)
+    - [X] OBJ/MESH/etc -> STL (meshlab)
+    - [X] STL,OBJ -> PNG (jsc3d)
+    - [X] Molecule file conversion and visualization, just because
+    - [ ] DXF
 
-- [ ] Build out full integration tests for contrib
+- [ ] Rename contrib to `builtins` (?)
 
 - [ ] Work on some very simple refresh javascript to integrate
+
+- [ ] Build out full integration tests for contrib
+    - [ ] Mock out all spawn calls
+
+- [ ] Fix running unoconv within venv
+    - [ ] Check if in virtualenv and ensure environments Python is used when
+      doing subprocess calls
+
+- [ ] QoL conversion grid improvements:
+    - [ ] Add import system like Django's, so that `settings.py` doesn't need
+      to import anything
+    - [ ] Think more about how to make extension "supersede" mimetype in a
+      reliable way
+    - [ ] Add "configure" check to base Converter, which should ensure correct
+      Python and system packages installed for the converter to be functoinal
+    - [ ] Allow conversions to self
+    - [ ] Allow preferred conversion paths in settings, which are picked first
+      if available, e.g. like the following:
+        {
+            ('STL', 'JPG'): ['STL', 'PNG', 'add_background.png', 'JPG:1000x1000'],
+        }
+
+
 
 
 # Look into 3D rendering
 
-- [ ] Work on JSC3D CLI
-    - [ ] Integrate JSC3D with node canvas
-    - [ ] STL -> PNG
+- [X] Work on JSC3D CLI
+    - [X] Integrate JSC3D with node canvas
+    - [X] STL -> PNG
 
 # Build out contrib
 
@@ -156,8 +182,8 @@
 
 ## Mesh
 - Blender integration
-- Possibly create a JSC3D node module port / fork that uses `node-canvas`, and
-  expose a CLI that can render (via software) STL models and such
+- [X] Possibly create a JSC3D node module port / fork that uses `node-canvas`,
+  and expose a CLI that can render (via software) STL models and such
 
 # QoL improvements
 

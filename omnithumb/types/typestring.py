@@ -7,7 +7,7 @@ import mimetypes
 
 import magic
 
-UNKNOWN_MIMETYPE = ('application/x-empty', 'application/octet-stream')
+UNKNOWN_MIMETYPE = ('application/x-empty', 'application/octet-stream', 'text/plain')
 
 class TypeString:
     def __init__(self, s):

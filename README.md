@@ -42,10 +42,20 @@ To test it, try visiting something like:
 The first time you visit it it will just be a single placeholder pixel.
 Subsequent times it should be 200x200 thumbnail
 
-You might also be able to run this:
-* `http://localhost:8080/media/PDF/?url=idee.org/Georgia_opposition_NATO-Eng-F.doc`
+You might also be able to run this, if you have `unoconv` and ImageMagick
+(providing the `convert` command) installed:
+* `http://localhost:8080/media/thumb.jpg:200x200/?url=idee.org/Georgia_opposition_NATO-Eng-F.doc`
 
-This will convert the `.doc` into a PDF
+This will convert the `.doc` into a PDF, then into a JPG thumbnail
+
+If you have `jsc3d` installed (a Node JavaScript based 3D model renderer), then
+the following should render a delightful trumpet:
+* `http://localhost:8080/media/thumb.jpg:200x200/?url=people.sc.fsu.edu/~jburkardt/data/obj/trumpet.obj`
+
+The built-in converters interface with a variety of system binaries in order to
+provide rendering and conversion of many document, image, mesh. Adding new
+converters and rasterizers is simple, with relatively minimal code!
+
 
 ## With Docker
 

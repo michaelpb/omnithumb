@@ -14,7 +14,6 @@ class PILThumb(converter.Converter):
         'image/jpeg',
         'image/gif',
         'image/png',
-        'image/bitmap',
     ]
     outputs = [
         'thumb.png',
