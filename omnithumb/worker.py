@@ -6,6 +6,8 @@ import async_timeout
 from enum import Enum
 log = logging.getLogger()
 
+number = 1
+
 class Task(Enum):
     FUNC = 1          # Synchronous function
     DOWNLOAD = 2      # Downloading a file
@@ -21,7 +23,7 @@ class Worker:
     async def run(self):
         while self.running:
             # Queue up consuming next item
-            task_type, args = await self.queue.get()
+            task_type, args = await self.get_next()
             method = None
 
             # Determine the type of task, and possibly skip if we have
@@ -93,16 +95,21 @@ class AioWorker(Worker):
         self.running = True
         self.aiohttp = aiohttp.ClientSession(loop=asyncio.get_event_loop())
 
-        # Sets that 
+        # Sets for locking to prevent race conditions
         self.downloading_resources = set()
         self.converting_resources = set()
 
     async def enqueue(self, task_type, args):
-        return await self.queue.put((task_type, args))
+        global number
+        number += 1
+        return await self.queue.put((number, task_type, args))
 
     async def get_next(self):
-        # Queue up consuming next item
-        return await self.queue.get()
+        '''
+        Await the next item on the queue
+        '''
+        number, task_type, args = await self.queue.get()
+        return task_type, args
 
     async def check_download(self, foreign_resource):
         if foreign_resource in self.downloading_resources:

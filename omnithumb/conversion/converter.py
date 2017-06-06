@@ -11,6 +11,8 @@ class Converter:
     def __init__(self, config):
         self.config = config
 
+    def configure(self, config):
+        pass
 
 class ExecConverter(Converter):
     def get_arguments(self, resource):

@@ -3,24 +3,12 @@
 import os
 import click
 
-import omnithumb
 import asyncio
 from omnithumb import default_settings
 from omnithumb.conversion.utils import convert as async_convert
 from omnithumb.utils.graph import DirectedGraph
 from omnithumb.types.typestring import TypeString
-
-def get_config():
-    from omnithumb.conversion.converter import ConverterGraph
-    from omnithumb.responses.placeholder import PlaceholderSelector
-    settings = default_settings
-    custom_settings_path = os.environ.get('OMNIC_SETTINGS')
-    if custom_settings_path:
-        # TODO import here
-        pass
-    settings.converter_graph = ConverterGraph(settings.CONVERTERS)
-    settings.placeholders = PlaceholderSelector(settings)
-    return default_settings
+from omnithumb.config import settings
 
 @click.group()
 def cmds():
@@ -37,10 +25,10 @@ def runserver(port, ip, debug):
     '''
     Runs a Omnic web server
     '''
+    from omnithumb.server import runserver as do_runserver
     click.echo('Start server at: {}:{}'.format(ip, port))
     # TODO: add reloading, add environ 
-    settings = get_config()
-    omnithumb.runserver(settings, host=ip, port=port, debug=debug)
+    do_runserver(settings, host=ip, port=port, debug=debug)
 
     #register_all()
     #app.run(host=ip, port=port, debug=debug)
@@ -57,7 +45,6 @@ def convert(file, type):
     if not path.startswith('/'):
         path = os.path.abspath(path)
     click.echo('Converting: {} -> {}'.format(path, to_type))
-    settings = get_config()
     loop = asyncio.get_event_loop()
     try:
         loop.run_until_complete(async_convert(settings, path, to_type))

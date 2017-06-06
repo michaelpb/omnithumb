@@ -1,5 +1,22 @@
 # Next steps:
 
+## Top priority
+- [ ] Build out full unit tests for new features
+    - [ ] Worker
+    - [ ] Server
+    - [ ] Convert utilities
+
+- [ ] Build out full integration tests for contrib
+    - [ ] Mock out all spawn calls
+    - [ ] CLI interface
+
+- [ ] QoL settings improvement
+    - [ ] Make settings like Django so you import where you need
+      instead of pass around a "config" object
+    - [ ] Add import system like Django's, so that `settings.py` doesn't need
+      to import anything
+
+## Done
 - [X] Finish doc -> thumb proof of concept
     - [X] ExecConverter needs a "rename from" feature, that allows you to
       specify an output file that differs in name from the one that is expected
@@ -10,22 +27,18 @@
     - [X] OBJ/MESH/etc -> STL (meshlab)
     - [X] STL,OBJ -> PNG (jsc3d)
     - [X] Molecule file conversion and visualization, just because
-    - [ ] DXF
 
-- [ ] Rename contrib to `builtins` (?)
+## Misc
 
 - [ ] Work on some very simple refresh javascript to integrate
-
-- [ ] Build out full integration tests for contrib
-    - [ ] Mock out all spawn calls
 
 - [ ] Fix running unoconv within venv
     - [ ] Check if in virtualenv and ensure environments Python is used when
       doing subprocess calls
 
+- [ ] Rename contrib to `builtins` (?)
+
 - [ ] QoL conversion grid improvements:
-    - [ ] Add import system like Django's, so that `settings.py` doesn't need
-      to import anything
     - [ ] Think more about how to make extension "supersede" mimetype in a
       reliable way
     - [ ] Add "configure" check to base Converter, which should ensure correct
@@ -37,7 +50,9 @@
             ('STL', 'JPG'): ['STL', 'PNG', 'add_background.png', 'JPG:1000x1000'],
         }
 
-
+- [ ] AsyncIO improvements
+    - [ ] Replace all file system calls with aiofiles
+    - [ ] Replace all spawn system calls with asyncio equivalent
 
 
 # Look into 3D rendering
@@ -184,6 +199,7 @@
 - Blender integration
 - [X] Possibly create a JSC3D node module port / fork that uses `node-canvas`,
   and expose a CLI that can render (via software) STL models and such
+- [ ] DXF
 
 # QoL improvements
 

@@ -3,12 +3,14 @@
 *Nothing to see here, a work in progress!*
 
 
-# OmniThumb
+# OmniConverter
 
 ![Travis CI](https://travis-ci.org/michaelpb/omnithumb.svg?branch=master)
 
 Mostly stateless microservice for generating on-the-fly thumbs and previews of
 a wide variety of file types.
+
+Fully extendable to create any arbitrary conversion pipelines.
 
 
 # Getting started
@@ -25,9 +27,9 @@ resemble production environments, however it is very close.
     * On macOS, use something like `brew`
 2. Create a virtualenv. For example:
     * `mkdir -p ~/.venvs/`
-    * `python3 -m venv ~/.venvs/omnithumb`
+    * `python3 -m venv ~/.venvs/omnic`
 3. Activate virtualenv:
-    * `source ~/.venvs/omnithumb/bin/activate`
+    * `source ~/.venvs/omnic/bin/activate`
     * You will need to do this any time you want to work
 4. Install dependencies:
     * `pip install -r requirements/local.txt`
@@ -35,6 +37,9 @@ resemble production environments, however it is very close.
     * `py.test`
 6. Start the server:
     * `./bin/omnic runserver`
+
+
+## Test routes
 
 To test it, try visiting something like:
 * http://localhost:8080/media/thumb.png:200x200/?url=unsplash.it/450/450
