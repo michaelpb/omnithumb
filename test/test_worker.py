@@ -1,7 +1,6 @@
 """
 Tests for `worker` module.
 """
-import uvloop
 import asyncio
 
 import pytest
@@ -38,7 +37,7 @@ class RunOnceWorker(Worker):
 
 class TestBaseWorker:
     def setup_class(cls):
-        cls.loop = uvloop.new_event_loop()
+        cls.loop = asyncio.new_event_loop()
         asyncio.set_event_loop(cls.loop)
 
     @pytest.mark.asyncio
@@ -62,7 +61,7 @@ class FakeAioQueue(list):
 
 class TestAsyncioWorker:
     def setup_class(cls):
-        cls.loop = uvloop.new_event_loop()
+        cls.loop = asyncio.new_event_loop()
         asyncio.set_event_loop(cls.loop)
 
     @pytest.mark.asyncio

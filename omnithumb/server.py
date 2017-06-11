@@ -39,7 +39,7 @@ def register_all(settings, services):
         register_service(settings, service.ServiceMeta)
 
 
-def runserver(settings, host, port, debug=False):
+def runserver(settings, host, port, debug=False, just_setup_app=False):
     # Only import if actually running server (so that Sanic is not a dependency
     # if only using for convert mode)
     global app
@@ -50,14 +50,15 @@ def runserver(settings, host, port, debug=False):
     loop = uvloop.new_event_loop()
     asyncio.set_event_loop(loop)
     settings.async_queue = asyncio.Queue(loop=loop)
-
-    # Spin up worker
     settings.worker = AioWorker(settings.async_queue)
 
-    # Spin up server
+    if just_setup_app: # in unit tests likely, don't make the coroutines
+        return app
+
+    # Start server and worker
     server_coro = app.create_server(host=host, port=port, debug=debug)
     worker_coro = settings.worker.run()
-
     loop.run_until_complete(asyncio.gather(server_coro, worker_coro))
+
     return app
 

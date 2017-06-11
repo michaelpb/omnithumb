@@ -3,6 +3,7 @@ Tests for `utils` module.
 """
 import pytest
 
+from omnithumb import utils
 from omnithumb.utils import graph
 
 class TestDirectedGraph:
@@ -127,4 +128,31 @@ class TestDirectedGraph:
         assert path == ('MP3', 'cleaned.ogg')
         with pytest.raises(graph.DirectedGraph.NoPath):
             self.dg.shortest_path('MP3', 'thumb.png')
+
+class TestIterUtils:
+    def test_pair_looper(self):
+        pair_looper = utils.iter.pair_looper
+        assert list(pair_looper([1, 2, 3])) == [(1, 2), (2, 3)]
+        assert list(pair_looper([1, 2, 3, 4])) == [(1, 2), (2, 3), (3, 4)]
+        assert list(pair_looper([1])) == []
+        assert list(pair_looper([])) == []
+
+    def test_first_last_iterator(self):
+        first_last_iterator = utils.iter.first_last_iterator
+        for first, last, i in first_last_iterator([1, 2, 3]):
+            assert i in (1, 2, 3)
+            if i == 1:
+                assert first and not last
+            if i == 2:
+                assert not first and not last
+            if i == 3:
+                assert not first and last
+
+        for first, last, i in first_last_iterator([1]):
+            assert i == 1
+            assert first and last
+
+    def test_group_by(self):
+        group_by = utils.iter.group_by
+        assert list(group_by('asdf', 2)) == ['as', 'df']
 

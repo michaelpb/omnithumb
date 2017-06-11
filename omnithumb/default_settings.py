@@ -18,6 +18,7 @@ logging.basicConfig(
 
 SERVICES = [
     'omnithumb.contrib.services.media',
+    'omnithumb.contrib.services.test',
 ]
 
 CONVERTERS = [
