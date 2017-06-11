@@ -5,7 +5,7 @@ import click
 
 import asyncio
 from omnithumb import default_settings
-from omnithumb.conversion.utils import convert as async_convert
+from omnithumb.conversion.utils import convert_local
 from omnithumb.utils.graph import DirectedGraph
 from omnithumb.types.typestring import TypeString
 from omnithumb.config import settings
@@ -47,7 +47,7 @@ def convert(file, type):
     click.echo('Converting: {} -> {}'.format(path, to_type))
     loop = asyncio.get_event_loop()
     try:
-        loop.run_until_complete(async_convert(settings, path, to_type))
+        loop.run_until_complete(convert_local(path, to_type))
     except DirectedGraph.NoPath as e:
         print('ERROR: %s' % str(e))
     loop.close()

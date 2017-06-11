@@ -1,6 +1,9 @@
 """
 Tests for `worker` module.
 """
+import uvloop
+import asyncio
+
 import pytest
 
 from omnithumb.worker import Worker, AioWorker, Task
@@ -34,6 +37,10 @@ class RunOnceWorker(Worker):
 
 
 class TestBaseWorker:
+    def setup_class(cls):
+        cls.loop = uvloop.new_event_loop()
+        asyncio.set_event_loop(cls.loop)
+
     @pytest.mark.asyncio
     async def test_run_once(self):
         worker = RunOnceWorker()
@@ -44,6 +51,7 @@ class TestBaseWorker:
         assert res is None
         assert worker.called_args == (1, 2, 3)
 
+
 class FakeAioQueue(list):
     async def put(self, item):
         self.append(item)
@@ -51,7 +59,12 @@ class FakeAioQueue(list):
     async def get(self):
         return self.pop(0)
 
+
 class TestAsyncioWorker:
+    def setup_class(cls):
+        cls.loop = uvloop.new_event_loop()
+        asyncio.set_event_loop(cls.loop)
+
     @pytest.mark.asyncio
     async def test_run_once(self):
         worker = AioWorker(FakeAioQueue())
@@ -70,6 +83,4 @@ class TestAsyncioWorker:
         res = await worker.run()
         assert res is None
         assert worker.called == 4
-
-
 

@@ -2,7 +2,7 @@
 
 ## Top priority
 - [ ] Build out full unit tests for new features
-    - [ ] Worker
+    - [X] Worker
     - [ ] Server
     - [ ] Convert utilities
 
@@ -240,4 +240,14 @@
   placeholder pixels
 
 - [ ] Built-in regexp for TypeString
+
+# Performance and stability improvements
+
+- [ ] Performance hack: Have a "sticky queue" system where resources go into
+  several worker queues based on hash on URI
+    - More importantly this would allow processing multiple resources at once,
+      and assumedly max out CPU better e.g. if waiting on slow net IO, could be
+      using that CPU for local conversion
+    - [ ] Long term solution: Allow task ordering in work queue system
+        - This would allow download + all conversions be queued w.r.t. each other
 

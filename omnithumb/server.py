@@ -1,4 +1,5 @@
 from sanic import Sanic
+
 import logging
 import importlib
 import uvloop
@@ -6,15 +7,6 @@ import asyncio
 
 from omnithumb.worker import AioWorker
 from omnithumb.worker import Task
-
-logging_format = "[%(asctime)s] %(process)d-%(levelname)s "
-logging_format += "%(module)s::%(funcName)s():l%(lineno)d: "
-logging_format += "%(message)s"
-
-logging.basicConfig(
-    format=logging_format,
-    level=logging.DEBUG
-)
 
 app = None
 
@@ -48,6 +40,8 @@ def register_all(settings, services):
 
 
 def runserver(settings, host, port, debug=False):
+    # Only import if actually running server (so that Sanic is not a dependency
+    # if only using for convert mode)
     global app
     app = Sanic(__name__)
     register_all(settings, settings.SERVICES)
