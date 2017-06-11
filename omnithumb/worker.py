@@ -20,6 +20,10 @@ class Worker:
     '''
     Worker base class, for use with coroutines
     '''
+    def __init__(self):
+        self.running = True
+        self.aiohttp = aiohttp.ClientSession(loop=asyncio.get_event_loop())
+
     async def run(self):
         while self.running:
             # Queue up consuming next item
@@ -91,9 +95,8 @@ class AioWorker(Worker):
     Uses an asyncio Queue to enqueue tasks
     '''
     def __init__(self, queue):
+        super().__init__()
         self.queue = queue
-        self.running = True
-        self.aiohttp = aiohttp.ClientSession(loop=asyncio.get_event_loop())
 
         # Sets for locking to prevent race conditions
         self.downloading_resources = set()
